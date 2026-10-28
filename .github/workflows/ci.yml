@@ -258,12 +258,10 @@ jobs:
         env:
           OVSX_PAT: ${{ secrets.OPENVSX_TOKEN }}
         run: |
-          # The downloaded VSIX already contains the pre-release metadata.
-          # Allow retries when this version was published by a previous run.
           if [[ "${{ needs.build.outputs.is_prerelease }}" == "true" ]]; then
             echo "✨ Publishing pre-release version ${{ needs.build.outputs.version }} to Open VSX"
-            npx --yes ovsx@1.1.1 publish --skip-duplicate *.vsix --pat "$OVSX_PAT"
+            npx ovsx publish --pre-release *.vsix --pat $OVSX_PAT
           else
             echo "🚀 Publishing release version ${{ needs.build.outputs.version }} to Open VSX"
-            npx --yes ovsx@1.1.1 publish --skip-duplicate *.vsix --pat "$OVSX_PAT"
+            npx ovsx publish *.vsix --pat $OVSX_PAT
           fi
